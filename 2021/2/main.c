@@ -64,30 +64,50 @@ int main(void)
         exit(EXIT_FAILURE);
     }
 
-    long number, prevNumber;
+    long number, a, b, c;
     _Bool isFirst = true;
     long larger = 0;
-    
+    long sum = 0, prevSum;
+    int count = 0;
+
     // Read line by line.
     while((read = getline(&line, &len, fp)) != -1)
     {
-        prevNumber = number;
+        ++count;
         number = stringToNumber(line, (unsigned int) read - 1);
-
-        printf("%ld", number);
+        
+        // Shift numbers.
+        a = b;
+        b = c;
+        c = number;
+        
+        // If a sum couldn't be formed yet, we skip.   
+        if(count < 3)
+        {
+            continue;
+        }
+        
+        prevSum = sum;
+        sum = a + b + c;
+        printf("%ld", sum);
         
         if(isFirst)
         {
             isFirst = false;
-            printf(" - " KYEL "First number" KNRM "\n");
+            printf(" - " KYEL "First sum" KNRM "\n");
         }
-        else if(number > prevNumber)
+        else if(sum > prevSum)
         {
             ++larger;
             printf(" - " KGRN "Increased" KNRM "\n");
         }
-        else {
+        else if(sum < prevSum)
+        {
             printf(" - " KRED "Decreased" KNRM "\n");
+        }   
+        else 
+        {
+            printf(" - " KRED "No change" KNRM "\n"); 
         }
     }
     
